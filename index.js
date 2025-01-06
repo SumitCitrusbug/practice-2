@@ -10,7 +10,7 @@ const server = http.createServer(app);
 // Configure CORS for Socket.IO
 const io = socketIo(server, {
   cors: {
-    origin: "http://127.0.0.1:5501", // Frontend URL
+    origin: "https://practice-2-kappa.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },

@@ -26,7 +26,7 @@
         let busMarker = L.marker([0, 0]).addTo(map);
 
         // Connect to the server using Socket.IO
-        const socket = io('http://localhost:3000');
+        const socket = io('https://practice-2-kappa.vercel.app');
 
         // Check if the socket connection is successful
         socket.on('connect', () => {
