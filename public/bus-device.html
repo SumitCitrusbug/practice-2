@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Bus Tracking</title>
+</head>
+<body>
+    <h1>Bus Location Tracker</h1>
+    <button id="startTracking">Start Tracking Bus</button>
+
+    <script>
+        document.getElementById('startTracking').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Send the latitude and longitude to the server (simulate bus location)
+                    fetch('http://localhost:3000/update-location', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            busId: 'bus1',  // Unique ID for the bus
+                            latitude: latitude,
+                            longitude: longitude,
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log('Location sent successfully:', data))
+                    .catch(error => console.error('Error sending location:', error));
+                }, function(error) {
+                    console.error('Error getting location:', error);
+                }, {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: 5000
+                });
+            } else {
+                console.log('Geolocation is not supported by this browser.');
+            }
+        });
+    </script>
+</body>
+</html>

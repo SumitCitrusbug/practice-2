@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Location Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <h1>Bus Location Tracker</h1>
+    <div id="map" style="height: 600px;"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
+
+    <script>
+        // Initialize the map with default coordinates (0, 0)
+        const map = L.map('map').setView([0, 0], 13); 
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Initialize the marker (this will be updated with bus location)
+        let busMarker = L.marker([0, 0]).addTo(map);
+
+        // Connect to the server using Socket.IO
+        const socket = io('http://localhost:3000');
+
+        // Check if the socket connection is successful
+        socket.on('connect', () => {
+            console.log('Socket connected:', socket.id);
+        });
+
+        // Listen for location updates from the server
+        socket.on('locationUpdate', function(data) {
+            console.log('Received location update:', data);
+            const { busId, latitude, longitude } = data;
+
+            // Ensure we have valid latitude and longitude
+            if (latitude && longitude) {
+                // Update the marker position on the map
+                busMarker.setLatLng([latitude, longitude]);
+
+                // Optional: Update the map view to center on the bus
+                map.setView([latitude, longitude], 13);
+            } else {
+                console.log('Invalid coordinates received:', data);
+            }
+        });
+
+        // Optional: Log if there is an error in the socket connection
+        socket.on('connect_error', (err) => {
+            console.log('Socket connection error:', err);
+        });
+    </script>
+</body>
+</html>
