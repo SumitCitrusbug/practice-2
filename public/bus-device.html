@@ -17,7 +17,7 @@
                     const longitude = position.coords.longitude;
 
                     // Send the latitude and longitude to the server (simulate bus location)
-                    fetch('http://localhost:3000/update-location', {
+                    fetch('https://practice-2-kappa.vercel.app/update-location', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
