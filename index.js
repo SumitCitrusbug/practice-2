@@ -47,6 +47,6 @@ io.on("connection", (socket) => {
 });
 
 // Start the server
-server.listen(3000, () => {
+server.listen("https://practice-2-kappa.vercel.app", () => {
   console.log("Server running on http://localhost:3000");
 });
